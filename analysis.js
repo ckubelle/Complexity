@@ -103,9 +103,11 @@ function decisionCounter(node){
 	let max = 0;
 	let IfStatement = false;
 	traverseWithParents(node, function (node) {
-		//if (node.type === "IfStatement") ifStatement = true;
+		
 		if (node.type === "LogicalExpression" && (node.operator === "&&" || node.operator === "||"))
 			max++;
+		else if(node.type === "IfStatement") 
+			max = 1;
 	});
 
 	return max;
@@ -140,7 +142,7 @@ function complexity(filePath)
 				if(isDecision(node)){
 					builder.SimpleCyclomaticComplexity += 1;
 					if (decisionCounter(node) > max){
-						max = decisionCounter(node) + 1;
+						max = decisionCounter(node);
 					}
 				}
 			});
