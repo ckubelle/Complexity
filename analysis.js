@@ -138,6 +138,7 @@ function complexity(filePath)
 			let max = 0;
 			traverseWithParents(node, function (node){
 				if(isDecision(node)){
+					builder.SimpleCyclomaticComplexity += 1;
 					if (decisionCounter(node) > max){
 						max = decisionCounter(node) + 1;
 					}
