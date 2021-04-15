@@ -44,8 +44,7 @@ function FunctionBuilder() {
 				"============\n" +
 				"SimpleCyclomaticComplexity: {2}\t" +
 				"MaxNestingDepth: {3}\t" +
-				"MaxConditions: {4}\t" +
-				"Parameters: {5}\n\n"
+				"MaxConditions: {4}   " + "Parameters: {5}\n\n"
 			)
 				.format(this.FunctionName, this.StartLine,
 					this.SimpleCyclomaticComplexity, this.MaxNestingDepth,
