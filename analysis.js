@@ -77,6 +77,8 @@ function FileBuilder()
 			  "Strings {2}\n"
 			).format( this.FileName, this.ImportCount, this.Strings ));
 	}
+
+
 }
 
 // A function following the Visitor pattern.
@@ -115,6 +117,7 @@ function decisionCounter(node){
 
 function complexity(filePath)
 {
+    
 	var buf = fs.readFileSync(filePath, "utf8");
 	var ast = esprima.parse(buf, options);
 
@@ -154,11 +157,12 @@ function complexity(filePath)
 
 		if(node.type === 'Literal'){
 			fileBuilder.Strings += 1;
+    
 		}
 
 	});
 
-	
+	strings = fileBuilder.Strings;
 }
 
 // Helper function for counting children of node.
@@ -307,4 +311,13 @@ remainder.toString() + " seconds";
 mints.toString().split(".")[0] + " " + szmin;
       }
   }
- exports.complexity = complexity;
+  var strings = 0;
+  function getStrings(){
+    return strings;
+
+}
+
+
+
+exports.getStrings = getStrings;
+exports.complexity = complexity;

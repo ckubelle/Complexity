@@ -9,4 +9,15 @@ describe("Sanity check", function() {
        main.complexity("analysis.js")
     });
   });
+
+  describe("Strings: ", function() {
+    it("Strings in mystery.js is 19.", function() {
+      main.complexity("mystery.js")
+      let stringCount = main.getStrings(); 
+      assert.equal(19, stringCount);
+    });
+  });
+
+
+
 });
