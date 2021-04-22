@@ -35,7 +35,7 @@ function FunctionBuilder()
 	// The number of parameters for functions
 	this.ParameterCount  = 0,
 	// Number of if statements/loops + 1
-	this.SimpleCyclomaticComplexity = 0;
+	this.SimpleCyclomaticComplexity = 1;
 	// The max depth of scopes (nested ifs, loops, etc)
 	this.MaxNestingDepth    = 0;
 	// The max number of conditions if one decision statement.
@@ -99,6 +99,20 @@ function traverseWithParents(object, visitor)
     }
 }
 
+function decisionCounter(node){
+	let max = 0;
+	let IfStatement = false;
+	traverseWithParents(node, function (node) {
+		
+		if (node.type === "LogicalExpression" && (node.operator === "&&" || node.operator === "||"))
+			max++;
+		else if(node.type === "IfStatement") 
+			max = 1;
+	});
+
+	return max;
+}
+
 function complexity(filePath)
 {
 	var buf = fs.readFileSync(filePath, "utf8");
@@ -118,15 +132,33 @@ function complexity(filePath)
 		if (node.type === 'FunctionDeclaration') 
 		{
 			var builder = new FunctionBuilder();
-
+			
 			builder.FunctionName = functionName(node);
-			builder.StartLine    = node.loc.start.line;
-
+			builder.StartLine = node.loc.start.line;
 			builders[builder.FunctionName] = builder;
+			builder.ParameterCount = node.params.length;
+			let max = 0;
+			traverseWithParents(node, function (node){
+				if(isDecision(node)){
+					builder.SimpleCyclomaticComplexity += 1;
+					if (decisionCounter(node) > max){
+						max = decisionCounter(node);
+					}
+				}
+			});
+
+			builder.MaxConditions = max;
+			
+
+		}
+
+		if(node.type === 'Literal'){
+			fileBuilder.Strings += 1;
 		}
 
 	});
 
+	
 }
 
 // Helper function for counting children of node.
